@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/aidenzou/vue-base-project#readme",
   "dependencies": {
+    "firebase": "^2.3.2",
     "vue": "^1.0.13",
-    "vue-router": "^0.7.7"
+    "vue-router": "^0.7.7",
+    "wilddog": "^0.4.10"
   },
   "devDependencies": {
     "babel-core": "^6.3.26",

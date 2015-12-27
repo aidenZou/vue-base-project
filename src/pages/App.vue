@@ -1,8 +1,16 @@
 <template>
   <div id="wrapper">
     <!-- header -->
+    <!-- <div id="header">我是 header</div> -->
     <div id="header">
-      我是 header
+      <a id="yc" href="http://www.ycombinator.com">
+        <img src="https://news.ycombinator.com/y18.gif">
+      </a>
+      <h1><a href="#/">Hacker News</a></h1>
+      <span class="source">
+        Built with <a href="http://vuejs.org" target="_blank">Vue.js</a> |
+        <a href="https://github.com/yyx990803/vue-hackernews" target="_blank">Source</a>
+      </span>
     </div>
     <!-- main view -->
     <router-view
