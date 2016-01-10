@@ -2,9 +2,9 @@ import Wilddog from 'wilddog/lib/wilddog-node.js'
 import { EventEmitter } from 'events'
 import { Promise } from 'es6-promise'
 
-console.log(Wilddog);
-
-const api = new Wilddog("https://vue-pro.wilddogio.com/")
+// const api = new Wilddog("https://vue-pro.wilddogio.com/")
+// https://vue-pro.wilddogio.com/demo-crud/users
+const api = new Wilddog("https://vue-pro.wilddogio.com/demo-crud/users");
 const itemsCache = Object.create(null)
 const store = new EventEmitter()
 const storiesPerPage = store.storiesPerPage = 30
@@ -13,76 +13,26 @@ let topStoryIds = []
 
 export default store
 
-/**
- * Subscribe to real time updates of the top 100 stories,
- * and cache the IDs locally.
- */
-api.child('topstories').on('value', snapshot => {
-  topStoryIds = snapshot.val()
-  store.emit('topstories-updated')
-})
-
-// /**
-//  * Fetch an item data with given id.
-//  *
-//  * @param {Number} id
-//  * @return {Promise}
-//  */
-// store.fetchItem = id => {
-//   return new Promise((resolve, reject) => {
-//     if (itemsCache[id]) {
-//       resolve(itemsCache[id])
-//     } else {
-//       api.child('item/' + id).once('value', snapshot => {
-//         const story = itemsCache[id] = snapshot.val()
-//         resolve(story)
-//       }, reject)
-//     }
-//   })
-// }
-
-/**
- * Fetch the given list of items.
- *
- * @param {Array<Number>} ids
- * @return {Promise}
- */
-// store.fetchItems = ids => {
-//   if (!ids || !ids.length) {
-//     return Promise.resolve([])
-//   } else {
-//     return Promise.all(ids.map(id => store.fetchItem(id)))
-//   }
-// }
-
-/**
- * Fetch items for the given page.
- *
- * @param {Number} page
- * @return {Promise}
- */
-store.fetchItemsByPage = page => {
-  const start = (page - 1) * storiesPerPage
-  const end = page * storiesPerPage
-  console.log(topStoryIds);
-  const ids = topStoryIds.slice(start, end)
-  console.log(ids);
-  return store.fetchUsers(ids)
+store.add = user => {
+  console.log(user);
+  if (!user) return
+  console.log(111);
+  api.push(user);
+  // let childref = api.push(user);
+  // if (childref.key()) {
+  //   // 成功
+  // }
 }
 
-/**
- * Fetch a user data with given id.
- *
- * @param {Number} id
- * @return {Promise}
- */
-// store.fetchUser = id => {
-//   return new Promise((resolve, reject) => {
-//     api.child('user/' + id).once('value', snapshot => {
-//       resolve(snapshot.val())
-//     }, reject)
-//   })
-// }
+// 当有子节点被删除时触发
+store.remove = id => {
+  api.child(id).remove()
+}
+
+api.on('child_removed', function(snapshot,prev){
+  console.log(snapshot.val());
+  console.log("the previous key is",prev)
+})
 
 /**
  * Fetch an item data with given id.
@@ -95,7 +45,7 @@ store.fetchUser = id => {
     if (itemsCache[id]) {
       resolve(itemsCache[id])
     } else {
-      api.child('user/' + id).once('value', snapshot => {
+      api.child('users/' + id).once('value', snapshot => {
         const story = itemsCache[id] = snapshot.val()
         resolve(story)
       }, reject)
@@ -136,11 +86,54 @@ store.fetchUsers = ids => {
   // }
 }
 
-store.fetchFirstUsers = () => {
-  api.child('user').limitToFirst(10).on("child_added",function(snapshot){
+store.fetchUsersByPage = page => {
 
+  api.orderByKey().on("child_added", function(snapshot) {
+    // console.log(snapshot);
     console.log(snapshot.key());
     console.log(snapshot.val());
-    return Promise.resolve()
-  });
+
+    // snapshot.forEach(function(data) {
+    //   console.log(data);
+    //
+    //   console.log("The " + data.key() + " score is " + data.val());
+    //
+    // });
+
+  })
+
+  console.log(page);
+
+  // const start = (page - 1) * storiesPerPage
+  // const end = page * storiesPerPage
+  // const ids = topStoryIds.slice(start, end)
+  //
+  // console.log(ids);
+  // return store.fetchUsers(ids)
 }
+
+store.fetchFirstUsers = () => {
+  let list = []
+  let mdata = new Map()
+
+  return new Promise((resolve, reject) => {
+    api.limitToFirst(50).on("child_added", function(snapshot) {
+      let data = snapshot.val()
+      data.id = snapshot.key()
+      list.push(data)
+      resolve(list)
+
+      // mdata.set(snapshot.key(), snapshot.val())
+      // resolve(mdata)
+    }, reject);
+  })
+}
+
+// return new Promise((resolve, reject) => {
+//   api.limitToFirst(2).on("child_added", function(snapshot) {
+//     console.log(snapshot.key());
+//     console.log(snapshot.val());
+//     // TODO
+//     resolve([])
+//   }, reject);
+// })

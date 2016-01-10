@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { domain, fromNow } from './filters'
 import App from './pages/App.vue'
-import Test from './pages/Test.vue'
+import Curd from './pages/Curd.vue'
+import Todo from './pages/Todo.vue'
 import NewsView from './pages/NewsView.vue'
 import ItemView from './pages/ItemView.vue'
 import UserView from './pages/UserView.vue'
@@ -14,12 +15,29 @@ Vue.use(Router)
 Vue.filter('fromNow', fromNow)
 Vue.filter('domain', domain)
 
+// Vue.directive('todo-focus', function (value) {
+//   if (!value) {
+//     return;
+//   }
+//   let el = this.el;
+//   Vue.nextTick(function () {
+//     el.focus();
+//   });
+// })
+
 // routing
 var router = new Router()
 
 router.map({
   '/': {
-    component: Test
+    component: Todo
+  },
+  '/todo': {
+    component: Todo,
+
+  },
+  '/curd': {
+    component: Curd
   },
   '/news/:page': {
     component: NewsView

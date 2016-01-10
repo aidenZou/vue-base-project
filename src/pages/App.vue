@@ -2,7 +2,7 @@
   <div id="wrapper">
     <!-- header -->
     <!-- <div id="header">我是 header</div> -->
-    <div id="header">
+    <!-- <div id="header">
       <a id="yc" href="http://www.ycombinator.com">
         <img src="https://news.ycombinator.com/y18.gif">
       </a>
@@ -11,7 +11,8 @@
         Built with <a href="http://vuejs.org" target="_blank">Vue.js</a> |
         <a href="https://github.com/yyx990803/vue-hackernews" target="_blank">Source</a>
       </span>
-    </div>
+    </div> -->
+    
     <!-- main view -->
     <router-view
       class="view"
@@ -23,7 +24,7 @@
 </template>
 
 <style lang="stylus">
-@import "../variables.styl"
+/*@import "../variables.styl"
 
 html, body
   font-family Verdana
@@ -45,7 +46,7 @@ a
   position relative
   width 85%
   min-height 80px
-  margin 0 auto
+  margin 0 auto*/
 
 #header
   background-color #f60
@@ -68,7 +69,7 @@ a
       &:hover
         text-decoration underline
 
-#yc
+/*#yc
   border 1px solid #fff
   margin 2px
   display inline-block
@@ -90,5 +91,5 @@ a
   html, body
     margin 0
   #wrapper
-    width 100%
+    width 100%*/
 </style>
